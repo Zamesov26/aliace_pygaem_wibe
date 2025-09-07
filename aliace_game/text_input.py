@@ -4,7 +4,7 @@ This module provides a TextInput class for creating text input fields in pygame.
 """
 
 import pygame
-from .constants import BLACK, WHITE, GRAY, FONT_SIZE_SMALL
+from .constants import BLACK, WHITE, GRAY, LIGHT_GRAY, FONT_SIZE_SMALL
 
 class TextInput:
     """A text input UI component."""

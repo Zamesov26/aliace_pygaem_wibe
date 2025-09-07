@@ -22,9 +22,16 @@ FONT_SIZE_MEDIUM = 36
 FONT_SIZE_SMALL = 24
 
 # Game settings
-GAME_DURATION_EASY = 180    # 3 minutes for easy
-GAME_DURATION_MEDIUM = 120  # 2 minutes for medium
-GAME_DURATION_HARD = 60     # 1 minute for hard
+DEFAULT_GAME_DURATION = 120  # 2 minutes default
+
+# Time options (in seconds)
+TIME_OPTIONS = [
+    60,   # 1 minute
+    120,  # 2 minutes
+    180,  # 3 minutes
+    240,  # 4 minutes
+    300   # 5 minutes
+]
 
 # Screen identifiers
 SCREEN_MENU = "menu"
