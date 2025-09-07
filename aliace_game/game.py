@@ -92,7 +92,7 @@ class EliasGame:
         # Difficulty selection buttons
         self.easy_button = Button(
             WINDOW_WIDTH // 2 - 150,
-            WINDOW_HEIGHT // 2 - 40,
+            WINDOW_HEIGHT // 2 - 60,
             100,
             50,
             "Легко",
@@ -103,7 +103,7 @@ class EliasGame:
         
         self.medium_button = Button(
             WINDOW_WIDTH // 2 - 50,
-            WINDOW_HEIGHT // 2 - 40,
+            WINDOW_HEIGHT // 2 - 60,
             100,
             50,
             "Средне",
@@ -114,7 +114,7 @@ class EliasGame:
         
         self.hard_button = Button(
             WINDOW_WIDTH // 2 + 50,
-            WINDOW_HEIGHT // 2 - 40,
+            WINDOW_HEIGHT // 2 - 60,
             100,
             50,
             "Сложно",
@@ -197,7 +197,7 @@ class EliasGame:
         
         self.add_word_button = Button(
             WINDOW_WIDTH - 150, 
-            100, 
+            120, 
             130, 40, 
             "Добавить", 
             GREEN, 
@@ -207,7 +207,7 @@ class EliasGame:
         
         self.edit_word_button = Button(
             WINDOW_WIDTH - 150, 
-            150, 
+            170, 
             130, 40, 
             "Изменить", 
             BLUE, 
@@ -217,7 +217,7 @@ class EliasGame:
         
         self.delete_word_button = Button(
             WINDOW_WIDTH - 150, 
-            200, 
+            220, 
             130, 40, 
             "Удалить", 
             RED, 
@@ -227,7 +227,7 @@ class EliasGame:
         
         self.save_word_button = Button(
             WINDOW_WIDTH - 150, 
-            250, 
+            270, 
             130, 40, 
             "Сохранить", 
             GREEN, 
@@ -237,7 +237,7 @@ class EliasGame:
         
         self.cancel_edit_button = Button(
             WINDOW_WIDTH - 150, 
-            300, 
+            320, 
             130, 40, 
             "Отмена", 
             LIGHT_GRAY, 
@@ -248,7 +248,7 @@ class EliasGame:
         # Management screen UI components
         self.word_input = TextInput(
             50, 
-            100, 
+            120, 
             WINDOW_WIDTH - 250, 
             40, 
             "Введите новое слово..."
@@ -256,7 +256,7 @@ class EliasGame:
         
         self.difficulty_dropdown = Dropdown(
             50,
-            150,
+            170,
             200,
             40,
             ["easy", "medium", "hard"],
@@ -265,7 +265,7 @@ class EliasGame:
         
         self.word_list = WordList(
             50, 
-            200, 
+            220, 
             WINDOW_WIDTH - 250, 
             WINDOW_HEIGHT - 270,
             self.word_manager.get_all_words()
@@ -634,12 +634,17 @@ class EliasGame:
         
         # Draw title
         title_text = self.large_font.render("Настройки игры", True, BLACK)
-        title_rect = title_text.get_rect(center=(WINDOW_WIDTH//2, WINDOW_HEIGHT//4 - 40))
+        title_rect = title_text.get_rect(center=(WINDOW_WIDTH//2, WINDOW_HEIGHT//4 - 50))
         self.screen.blit(title_text, title_rect)
         
         # Draw difficulty label
         difficulty_label = self.medium_font.render("Выберите сложность:", True, BLACK)
-        self.screen.blit(difficulty_label, (WINDOW_WIDTH//2 - difficulty_label.get_width()//2, WINDOW_HEIGHT//2 - 80))
+        self.screen.blit(difficulty_label, (WINDOW_WIDTH//2 - difficulty_label.get_width()//2, WINDOW_HEIGHT//2 - 100))
+        
+        # Draw difficulty buttons
+        self.easy_button.draw(self.screen)
+        self.medium_button.draw(self.screen)
+        self.hard_button.draw(self.screen)
         
         # Draw difficulty description
         if self.selected_difficulty == "easy":
@@ -649,13 +654,8 @@ class EliasGame:
         else:  # medium
             desc_text = self.small_font.render("Средне: Слова средней сложности", True, BLACK)
             
-        desc_rect = desc_text.get_rect(center=(WINDOW_WIDTH//2, WINDOW_HEIGHT//2 - 10))
+        desc_rect = desc_text.get_rect(center=(WINDOW_WIDTH//2, WINDOW_HEIGHT//2 - 20))
         self.screen.blit(desc_text, desc_rect)
-        
-        # Draw buttons
-        self.easy_button.draw(self.screen)
-        self.medium_button.draw(self.screen)
-        self.hard_button.draw(self.screen)
         
         # Draw time label
         time_label = self.medium_font.render("Выберите время:", True, BLACK)
@@ -760,7 +760,7 @@ class EliasGame:
         
         # Draw word count
         count_text = self.small_font.render(f"Всего слов: {self.word_manager.get_word_count()}", True, BLACK)
-        self.screen.blit(count_text, (50, 70))
+        self.screen.blit(count_text, (50, 80))
         
         # Draw difficulty counts
         counts = self.word_manager.get_word_count_by_difficulty()
@@ -768,14 +768,14 @@ class EliasGame:
             f"Легко: {counts.get('easy', 0)} | Средне: {counts.get('medium', 0)} | Сложно: {counts.get('hard', 0)}", 
             True, BLACK
         )
-        self.screen.blit(counts_text, (50, 90))
+        self.screen.blit(counts_text, (50, 100))
         
         # Draw input field
         self.word_input.draw(self.screen)
         
         # Draw difficulty dropdown
         difficulty_label = self.small_font.render("Сложность:", True, BLACK)
-        self.screen.blit(difficulty_label, (50, 130))
+        self.screen.blit(difficulty_label, (50, 150))
         self.difficulty_dropdown.draw(self.screen)
         
         # Draw buttons based on mode
