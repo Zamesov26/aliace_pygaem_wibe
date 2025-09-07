@@ -4,12 +4,12 @@ This module provides a Button class for creating interactive buttons in pygame.
 """
 
 import pygame
-from .constants import BLACK, FONT_SIZE_MEDIUM
+from .constants import BLACK, FONT_SIZE_MEDIUM, FONT_SIZE_SMALL
 
 class Button:
     """A clickable button UI component."""
     
-    def __init__(self, x, y, width, height, text, color, hover_color):
+    def __init__(self, x, y, width, height, text, color, hover_color, font_size=FONT_SIZE_MEDIUM):
         """
         Initialize a new Button.
         
@@ -21,13 +21,14 @@ class Button:
             text (str): The text to display on the button
             color (tuple): The RGB color of the button
             hover_color (tuple): The RGB color when the button is hovered over
+            font_size (int): The font size for the button text
         """
         self.rect = pygame.Rect(x, y, width, height)
         self.text = text
         self.color = color
         self.hover_color = hover_color
         self.current_color = color
-        self.font = pygame.font.Font(None, FONT_SIZE_MEDIUM)
+        self.font = pygame.font.Font(None, font_size)
         
     def draw(self, screen):
         """
