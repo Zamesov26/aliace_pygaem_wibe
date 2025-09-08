@@ -351,9 +351,12 @@ class EliasGame:
             difficulty (str): Difficulty level ("easy", "medium", "hard")
         """
         self.selected_difficulty = difficulty
-        # Update button colors
+        # Update button colors - fix both base color and current color
+        self.easy_button.color = GREEN if difficulty == "easy" else LIGHT_GRAY
         self.easy_button.current_color = GREEN if difficulty == "easy" else LIGHT_GRAY
+        self.medium_button.color = GREEN if difficulty == "medium" else LIGHT_GRAY
         self.medium_button.current_color = GREEN if difficulty == "medium" else LIGHT_GRAY
+        self.hard_button.color = GREEN if difficulty == "hard" else LIGHT_GRAY
         self.hard_button.current_color = GREEN if difficulty == "hard" else LIGHT_GRAY
         
     def enter_edit_mode(self, word, difficulty):
@@ -491,7 +494,6 @@ class EliasGame:
                 if self.time_dropdown.handle_event(event):
                     continue
                 
-                
                 if event.type == pygame.MOUSEMOTION:
                     mouse_pos = pygame.mouse.get_pos()
                     self.easy_button.check_hover(mouse_pos)
@@ -510,7 +512,7 @@ class EliasGame:
                         elif self.hard_button.check_click(mouse_pos):
                             self.select_difficulty("hard")
                         elif self.confirm_settings_button.check_click(mouse_pos):
-                            # Get selected time from dropdown
+                            # Get selected time from dropd
                             time_label = self.time_dropdown.get_selected_option()
                             # Convert label back to seconds
                             time_minutes = int(time_label.split()[0])
@@ -795,12 +797,11 @@ class EliasGame:
         # Draw word list
         self.word_list.draw(self.screen)
         
-        
         # Draw difficulty dropdown
         difficulty_label = self.small_font.render("Сложность:", True, BLACK)
         self.screen.blit(difficulty_label, (50, 150))
         self.difficulty_dropdown.draw(self.screen)
-
+        
         # Draw message if exists
         if self.message and self.message_timer > 0:
             message_color = RED if "Ошибка" in self.message or "уже существует" in self.message else GREEN
