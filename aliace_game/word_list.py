@@ -52,6 +52,8 @@ class WordList:
         # Reset selection when updating words
         self.selected_word = None
         self.selected_index = -1
+        # Reset scroll offset when updating words
+        self.scroll_offset = 0
         
     def handle_event(self, event):
         """
@@ -69,9 +71,12 @@ class WordList:
                 if self.scrollbar_rect.collidepoint(event.pos):
                     self.scrollbar_dragging = True
                     # Calculate drag offset
-                    scrollbar_height = max(20, (self.rect.height / max(1, len(self.words))) * self.rect.height)
-                    scrollbar_y = self.rect.top + (self.scroll_offset / max(1, len(self.words) * self.item_height)) * (self.rect.height - scrollbar_height)
-                    self.scrollbar_drag_offset = event.pos[1] - scrollbar_y
+                    if len(self.words) > 0:
+                        max_scroll = max(1, len(self.words) * self.item_height - self.rect.height)
+                        if max_scroll > 0:
+                            scrollbar_height = max(20, (self.rect.height * self.rect.height) / (len(self.words) * self.item_height))
+                            scrollbar_y = self.rect.top + (self.scroll_offset * (self.rect.height - scrollbar_height)) / max_scroll
+                            self.scrollbar_drag_offset = event.pos[1] - scrollbar_y
                     
                 # Check if clicking on word
                 elif self.rect.collidepoint(event.pos) and not self.scrollbar_rect.collidepoint(event.pos):
@@ -99,12 +104,13 @@ class WordList:
                 # Calculate new scroll position based on mouse position
                 mouse_y = event.pos[1] - self.scrollbar_drag_offset
                 # Clamp to valid range
-                mouse_y = max(self.rect.top, min(mouse_y, self.rect.bottom - 20))
-                
-                # Convert mouse position to scroll offset
-                scroll_ratio = (mouse_y - self.rect.top) / (self.rect.height - 20)
                 max_scroll = max(0, len(self.words) * self.item_height - self.rect.height)
-                self.scroll_offset = int(scroll_ratio * max_scroll)
+                if max_scroll > 0:
+                    # Convert mouse position to scroll offset
+                    scroll_ratio = max(0, min(1, (mouse_y - self.rect.top) / self.rect.height))
+                    self.scroll_offset = int(scroll_ratio * max_scroll)
+                else:
+                    self.scroll_offset = 0
                 
         return None
         
@@ -163,19 +169,33 @@ class WordList:
         
         # Draw scrollbar
         if len(self.words) > 0:
-            # Calculate scrollbar dimensions
-            scrollbar_height = max(20, (self.rect.height / max(1, len(self.words))) * self.rect.height)
-            max_scroll = max(1, len(self.words) * self.item_height - self.rect.height)
-            scrollbar_y = self.rect.top + (self.scroll_offset / max_scroll) * (self.rect.height - scrollbar_height)
-            
-            # Update scrollbar rect
-            self.scrollbar_rect = pygame.Rect(
-                self.rect.right - self.scrollbar_width,
-                scrollbar_y,
-                self.scrollbar_width,
-                scrollbar_height
-            )
-            
-            # Draw scrollbar
-            pygame.draw.rect(screen, GRAY, self.scrollbar_rect)
-            pygame.draw.rect(screen, BLACK, self.scrollbar_rect, 1)
+            max_scroll = max(0, len(self.words) * self.item_height - self.rect.height)
+            if max_scroll > 0:
+                # Calculate scrollbar dimensions
+                scrollbar_height = max(20, (self.rect.height * self.rect.height) / (len(self.words) * self.item_height))
+                scrollbar_height = min(scrollbar_height, self.rect.height)
+                
+                # Calculate scrollbar position
+                scrollbar_y = self.rect.top + (self.scroll_offset * (self.rect.height - scrollbar_height)) / max_scroll
+                
+                # Update scrollbar rect
+                self.scrollbar_rect = pygame.Rect(
+                    self.rect.right - self.scrollbar_width,
+                    scrollbar_y,
+                    self.scrollbar_width,
+                    scrollbar_height
+                )
+                
+                # Draw scrollbar
+                pygame.draw.rect(screen, GRAY, self.scrollbar_rect)
+                pygame.draw.rect(screen, BLACK, self.scrollbar_rect, 1)
+            else:
+                # No scrolling needed, draw a minimal scrollbar
+                self.scrollbar_rect = pygame.Rect(
+                    self.rect.right - self.scrollbar_width,
+                    self.rect.top,
+                    self.scrollbar_width,
+                    self.rect.height
+                )
+                pygame.draw.rect(screen, GRAY, self.scrollbar_rect)
+                pygame.draw.rect(screen, BLACK, self.scrollbar_rect, 1)
