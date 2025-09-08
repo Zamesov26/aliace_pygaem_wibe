@@ -488,7 +488,9 @@ class EliasGame:
                             
             elif self.current_screen == "difficulty":
                 # Handle difficulty selection events
-                self.time_dropdown.handle_event(event)
+                if self.time_dropdown.handle_event(event):
+                    continue
+                
                 
                 if event.type == pygame.MOUSEMOTION:
                     mouse_pos = pygame.mouse.get_pos()
@@ -520,7 +522,8 @@ class EliasGame:
             elif self.current_screen == SCREEN_MANAGE:
                 # Handle management screen events
                 self.word_input.handle_event(event)
-                self.difficulty_dropdown.handle_event(event)
+                if self.difficulty_dropdown.handle_event(event):
+                    continue
                 
                 # Handle word list events
                 action = self.word_list.handle_event(event)
@@ -661,13 +664,14 @@ class EliasGame:
         time_label = self.medium_font.render("Выберите время:", True, BLACK)
         self.screen.blit(time_label, (WINDOW_WIDTH//2 - time_label.get_width()//2, WINDOW_HEIGHT//2 + 5))
         
-        # Draw time dropdown
-        self.time_dropdown.draw(self.screen)
         
         # Draw confirm button
         self.confirm_settings_button.draw(self.screen)
         self.back_from_difficulty_button.draw(self.screen)
         
+        # Draw time dropdown
+        self.time_dropdown.draw(self.screen)
+
         pygame.display.flip()
         
     def draw_game_screen(self):
@@ -773,10 +777,6 @@ class EliasGame:
         # Draw input field
         self.word_input.draw(self.screen)
         
-        # Draw difficulty dropdown
-        difficulty_label = self.small_font.render("Сложность:", True, BLACK)
-        self.screen.blit(difficulty_label, (50, 150))
-        self.difficulty_dropdown.draw(self.screen)
         
         # Draw buttons based on mode
         self.back_button.draw(self.screen)
@@ -795,6 +795,12 @@ class EliasGame:
         # Draw word list
         self.word_list.draw(self.screen)
         
+        
+        # Draw difficulty dropdown
+        difficulty_label = self.small_font.render("Сложность:", True, BLACK)
+        self.screen.blit(difficulty_label, (50, 150))
+        self.difficulty_dropdown.draw(self.screen)
+
         # Draw message if exists
         if self.message and self.message_timer > 0:
             message_color = RED if "Ошибка" in self.message or "уже существует" in self.message else GREEN
